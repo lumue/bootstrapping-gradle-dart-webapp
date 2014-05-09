@@ -2,7 +2,7 @@ import 'dart:html';
 
 void main() {
   querySelector("#sample_text_id")
-      ..text = "Click me!"
+      ..text = "Reverse this!"
       ..onClick.listen(reverseText);
 }
 
