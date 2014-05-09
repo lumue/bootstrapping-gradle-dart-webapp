@@ -12,11 +12,20 @@ pubspec.lock
 ```
 to .gitignore
  
-add web folder, some source files
- 
-##run dart build with gradle
+add web folder, some source files, pubspec.yaml
+
 
 ##eclipse
 ###install dart tools
 ###add dart project nature, builders with gradle
+```
+eclipse.project {
+	natures 'org.springsource.ide.eclipse.gradle.core.nature','com.google.dart.tools.core.dartNature'
+	buildCommand 'com.google.dart.tools.core.dartBuilder'
+}
+```
+###run and debug in eclipse as dartium build
+
+##run dart build with gradle
+
 
