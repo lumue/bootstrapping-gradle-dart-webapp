@@ -4,3 +4,5 @@
 /.project
 /.gradle/
 /bin/
+/packages/
+pubspec.lock

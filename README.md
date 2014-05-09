@@ -1,24 +1,22 @@
-#gradle webapplication setup
+#gradle dart webapplication setup
 
-###configure gradle build
-apply war plugin
-set war basename (optional)
+##setup basic webapp 
+https://github.com/lumue/bootstrapping-gradle-webapp/blob/master/README.md
+
+##setup dart project
+
+add 
 ```
-war{
-	baseName = 'webapp'
-}
+pubspec.lock 
+/packages/
 ```
+to .gitignore
+ 
+add web folder, some source files
+ 
+##run dart build with gradle
 
-###add some webcontent
-create src/main/webapp folder
-create index.html
+##eclipse
+###install dart tools
+###add dart project nature, builders with gradle
 
-###run with jetty
-apply jetty plugin
-`gradle jettyRun`
-access app at http://localhost:8080/webapp
-
-##setup eclipse wtp facet
-apply eclipse-wtp plugin
-error: Java compiler level does not match the version of the installed Java project facet.	
-solution: patch from updatesite http://download.eclipse.org/webtools/patches/drops/R3.5.2/P-3.5.2-20140329045715/repository

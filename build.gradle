@@ -5,7 +5,8 @@ apply plugin: 'jetty'
 
 //eclipse configuration
 eclipse.project {
-	natures 'org.springsource.ide.eclipse.gradle.core.nature'
+	natures 'org.springsource.ide.eclipse.gradle.core.nature','com.google.dart.tools.core.dartNature'
+	buildCommand 'com.google.dart.tools.core.dartBuilder'
 }
 
 //project properties
