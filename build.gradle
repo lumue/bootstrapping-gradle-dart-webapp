@@ -11,7 +11,32 @@ eclipse.project {
 
 //project properties
 version = '0.1'
+
+
+//dart tasks
+task pubBuild << {
+	def proc = "pub build web --output dartbuild".execute()
+	proc.in.eachLine {line -> println line}
+	proc.err.eachLine {line -> println 'ERROR: ' + line}
+	proc.waitFor()
+}
+
+task pubGet << {
+	def proc = "pub get".execute()
+	proc.in.eachLine {line -> println line}
+	proc.err.eachLine {line -> println 'ERROR: ' + line}
+	proc.waitFor()
+}
+
+task cleanDart(type: Delete) {
+	delete 'dartbuild'
+}
+
 war{
+	from ("dartbuild")
 	baseName = 'webapp'
 }
+war.dependsOn(pubBuild)
+clean.dependsOn(cleanDart)
+
 
