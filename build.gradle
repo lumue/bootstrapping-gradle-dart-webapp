@@ -1,31 +1,67 @@
+buildscript {
+	repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-cargo-plugin:1.5'
+		
+    }
+}
+
 apply plugin: 'eclipse'
 apply plugin: 'war'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'jetty'
+apply plugin: 'java'
+apply plugin: 'cargo-base'
+apply plugin: 'cargo'
+
+repositories {
+	mavenCentral()
+	mavenRepo urls:'http://repository.jboss.org/nexus/content/groups/public-jboss/'
+}
 
 //eclipse configuration
 eclipse.project {
 	natures 'org.springsource.ide.eclipse.gradle.core.nature','com.google.dart.tools.core.dartNature'
 	buildCommand 'com.google.dart.tools.core.dartBuilder'
 }
+eclipse.classpath {
+	containers 'org.springsource.ide.eclipse.gradle.classpathcontainer'
+}
 
 //project properties
 version = '0.1'
 
+//java
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+dependencies{
+	
+	providedCompile 'javax:javaee-api:7.0'
+	compile 'org.springframework:spring-webmvc:4.0.3.RELEASE'
+	compile 'org.slf4j:slf4j-api:1.7.7'
+	
+	testCompile 'junit:junit:4.11'
+	
+	def cargoVersion = '1.4.8'
+	cargo 'org.wildfly:wildfly-controller-client:8.0.0.Final',
+		  "org.codehaus.cargo:cargo-core-uberjar:$cargoVersion",
+		  "org.codehaus.cargo:cargo-ant:$cargoVersion"
+		  
+		  
+	runtime 'org.slf4j:slf4j-log4j12:1.7.7','log4j:log4j:1.2.14'
+}
 
 //dart tasks
-task pubBuild << {
-	def proc = "pub build web --output dartbuild".execute()
-	proc.in.eachLine {line -> println line}
-	proc.err.eachLine {line -> println 'ERROR: ' + line}
-	proc.waitFor()
+task pubBuild(type:Exec) {
+	commandLine 'pub','build','web','--output','dartbuild'
 }
 
 task pubGet << {
-	def proc = "pub get".execute()
-	proc.in.eachLine {line -> println line}
-	proc.err.eachLine {line -> println 'ERROR: ' + line}
-	proc.waitFor()
+	commandLine 'pub','get'
 }
 
 task cleanDart(type: Delete) {
@@ -39,4 +75,22 @@ war{
 war.dependsOn(pubBuild)
 clean.dependsOn(cleanDart)
 
-
+//cargo deployment
+cargo {
+	
+	
+		containerId = 'wildfly8x'
+	
+		remote {
+			hostname = 'localhost'
+			username = 'admin'
+			password = 'admin'
+		}
+	
+		local {
+			jvmArgs = '-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n'
+			homeDir = file('/opt/jboss/wildfly-8.0.0.Final/')
+		}
+}
+cargoDeployRemote.dependsOn(war)
+cargoRedeployRemote.dependsOn(war)

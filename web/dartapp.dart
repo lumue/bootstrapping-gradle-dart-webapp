@@ -2,15 +2,16 @@ import 'dart:html';
 
 void main() {
   querySelector("#sample_text_id")
-      ..text = "Reverse this!"
+      ..text = "Reverse"
       ..onClick.listen(reverseText);
 }
 
 void reverseText(MouseEvent event) {
   var text = querySelector("#sample_text_id").text;
-  var buffer = new StringBuffer();
-  for (int i = text.length - 1; i >= 0; i--) {
-    buffer.write(text[i]);
-  }
-  querySelector("#sample_text_id").text = buffer.toString();
+  String url="../api/strings/revert/"+text;
+      HttpRequest.getString(url).then((String result){
+        querySelector("#sample_text_id").text = result.toString();
+      });
+ 
+  
 }
