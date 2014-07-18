@@ -19,7 +19,9 @@ apply plugin: 'cargo'
 
 repositories {
 	mavenCentral()
-	mavenRepo urls:'http://repository.jboss.org/nexus/content/groups/public-jboss/'
+	 maven {
+        url "http://repository.jboss.org/nexus/content/groups/public-jboss/"
+    }
 }
 
 //eclipse configuration
